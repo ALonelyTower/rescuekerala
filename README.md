@@ -13,6 +13,7 @@
     - [Postgres](#postgres)
     - [Git](#git)
     - [Redis](#redis)
+    - [Geckodriver](#geckodriver)
     - [Setting up an S3 Account](#setting-up-an-s3-account)
 - [Getting started](#getting-started)
 - [Creating migration files](#creating-migration-files)
@@ -70,6 +71,9 @@ Run it with sudo - `sudo sh docker.sh`
 #### [Git](https://git-scm.com/downloads)
 
 #### [Redis](https://redis.io/)
+
+#### [Geckodriver](https://github.com/mozilla/geckodriver/releases)
+Selenium depends on Geckodriver for its browser interactions.  It searches for the geckodriver binary in the system's PATH environment variables; therefore, after downloading and extracting the latest version of geckodriver, either relocate the binary in a directory listed under PATH, or add a new directory path to the system's PATH environment variable.
 
 #### Setting up an S3 Account
 
