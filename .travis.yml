@@ -7,6 +7,7 @@ services:
   - redis-server
 addons:
   postgresql: "9.4"
+  firefox: "latest"
 
 env:
   matrix:
