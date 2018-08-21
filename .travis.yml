@@ -1,4 +1,3 @@
-# sudo: enabled
 language: python 
 python:
   - "3.6"
@@ -26,7 +25,6 @@ before_install:
   - mkdir geckodriver
   - tar -xf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
-  - sudo apt-get install -y xvfb
 
 install:
   - pip install -r requirements.txt
