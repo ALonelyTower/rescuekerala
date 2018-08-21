@@ -8,7 +8,6 @@ services:
 
 addons:
   postgresql: "9.4"
-  firefox: "latest"
 
 env:
   matrix:
