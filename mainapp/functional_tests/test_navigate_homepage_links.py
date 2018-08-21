@@ -1,5 +1,6 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
 
 
 class HomePageHyperLinksTest(StaticLiveServerTestCase):
@@ -7,7 +8,9 @@ class HomePageHyperLinksTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = webdriver.Firefox()
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
+        cls.selenium = webdriver.Firefox(firefox_options=opts)
         cls.selenium.implicitly_wait(10)
 
     @classmethod
