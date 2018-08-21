@@ -508,7 +508,7 @@ class RequestUpdate(models.Model):
             choices = volunteer_update_status_types
         )
 
-    other_status = models.CharField(max_length=255, verbose_name='Status description if none of the default statuses are applicable', default='')
+    other_status = models.CharField(max_length=255, verbose_name='Please specify other status', default='', blank=True)
     updater_name = models.CharField(max_length=100, verbose_name='Name of person or group updating', blank=False)
 
     phone_number_regex = RegexValidator(regex='^((\+91|91|0)[\- ]{0,1})?[456789]\d{9}$', message='Please Enter 10/11 digit mobile number or landline as 0<std code><phone number>', code='invalid_mobile')
@@ -550,8 +550,8 @@ class CollectionCenter(models.Model):
     )
     lsg_name = models.CharField(max_length=150, null=True, blank=True, verbose_name="LSG Name - സ്വയംഭരണ സ്ഥാപനത്തിന്റെ പേര്")
     ward_name = models.CharField(max_length=150, null=True, blank=True, verbose_name="Ward - വാർഡ്")
-    is_inside_kerala = models.BooleanField(verbose_name="Center inside kerala? - കേന്ദ്രം കേരളത്തിലാണോ")
-    city = models.CharField(max_length=150, verbose_name="City - നഗരം")
+    is_inside_kerala = models.BooleanField(default=True, verbose_name="Center inside kerala? - കേന്ദ്രം കേരളത്തിലാണോ")
+    city = models.CharField(null=True, blank=True, max_length=150, verbose_name="City - നഗരം")
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -559,3 +559,11 @@ class CollectionCenter(models.Model):
 
     def get_absolute_url(self):
         return reverse('collection_centers_list')
+
+
+class CsvBulkUpload(models.Model):
+    name = models.CharField(max_length=20)
+    csv_file = models.FileField(upload_to=upload_to)
+
+    def __str__(self):
+        return self.name

@@ -5,7 +5,7 @@ from django.core.validators import EMPTY_VALUES
 from django.http import HttpResponse
 
 from .models import Request, Volunteer, Contributor, DistrictNeed, DistrictCollection, DistrictManager, vol_categories, \
-    RescueCamp, Person, NGO, Announcements, DataCollection , PrivateRescueCamp , CollectionCenter
+    RescueCamp, Person, NGO, Announcements, DataCollection , PrivateRescueCamp , CollectionCenter, CsvBulkUpload
 
 
 def create_csv_response(csv_name, header_row, body_rows):
@@ -59,7 +59,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     actions = ['download_csv', 'mark_inactive', 'mark_active']
     readonly_fields = ('joined',)
     list_display = ('name', 'phone', 'organisation', 'joined', 'is_active')
-    list_filter = ('district', 'joined', 'is_active', 'has_consented')	
+    list_filter = ('district', 'joined', 'is_active', 'has_consented')
 
     def download_csv(self, request, queryset):
         header_row = [f.name for f in Volunteer._meta.get_fields()]
@@ -119,6 +119,7 @@ class ContributorAdmin(admin.ModelAdmin):
     def mark_as_new(self, request, queryset):
         queryset.update(status='new')
         return
+
 
 class RescueCampAdmin(admin.ModelAdmin):
     actions = ['download_csv', 'download_inmates' ,  'mark_as_closed', 'mark_as_active']
@@ -197,6 +198,8 @@ class PersonAdmin(admin.ModelAdmin):
 class DataCollectionAdmin(admin.ModelAdmin):
     list_display = ['document_name', 'document', 'tag']
 
+class CsvBulkUploadAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(Request, RequestAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)
@@ -211,3 +214,4 @@ admin.site.register(NGO, NGOAdmin)
 admin.site.register(Announcements, AnnouncementAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(DataCollection, DataCollectionAdmin)
+admin.site.register(CsvBulkUpload, CsvBulkUploadAdmin)
