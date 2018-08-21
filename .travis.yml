@@ -8,6 +8,7 @@ services:
 
 addons:
   postgresql: "9.4"
+  firefox: "latest"
 
 env:
   matrix:
@@ -33,5 +34,4 @@ before_script:
   - psql -c 'create database test_db;' -U postgres
 
 script:
-  - xvfb-run make test
   - python manage.py test --settings=floodrelief.test_settings
