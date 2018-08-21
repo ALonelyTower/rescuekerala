@@ -19,12 +19,12 @@ class HomePageHyperLinksTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_navigate_from_home_to_requestforhelp(self):
-        homepage_requesthelp_link_text = "Request\nfor help\nസഹായം അഭ്യര്‍ഥിക്കാന്‍" 
+        homepage_requesthelp_link_text = "Request"
         requestpage_header_english_text = "Request For Help"
         requestpage_header_malayalam_text = "സഹായം അഭ്യര്‍ഥിക്കാന്‍"
 
         self.selenium.get(self.live_server_url)
-        request_help_link = self.selenium.find_element_by_link_text(homepage_requesthelp_link_text)
+        request_help_link = self.selenium.find_element_by_partial_link_text(homepage_requesthelp_link_text)
         request_help_link.click()
 
         self.assertIn("/request/", self.selenium.current_url)
