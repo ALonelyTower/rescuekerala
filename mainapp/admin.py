@@ -35,8 +35,8 @@ class RequestAdmin(admin.ModelAdmin):
     actions = ['download_csv', 'mark_as_completed', 'mark_as_new', 'mark_as_ongoing']
     readonly_fields = ('dateadded',)
     ordering = ('district',)
-    list_display = ('district', 'location', 'requestee_phone', 'status', 'summarise')
-    list_filter = ('district', 'status',)
+    list_display = ('district', 'location', 'requestee_phone', 'status', 'summarise', 'dateadded')
+    list_filter = ('district', 'status','dateadded')
 
     def mark_as_completed(self, request, queryset):
         queryset.update(status='sup')
@@ -216,7 +216,8 @@ class CsvBulkUploadAdmin(admin.ModelAdmin):
             import_inmate_file, obj.pk
         )
     autocomplete_fields = ['camp']
-    readonly_fields = ['is_completed']
+    readonly_fields = ['is_completed', 'failure_reason']
+    list_display = ['name','camp','is_completed']
 
 admin.site.register(Request, RequestAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)

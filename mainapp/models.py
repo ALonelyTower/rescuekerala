@@ -1,15 +1,14 @@
 import os
 import uuid
 from enum import Enum
+import csv
+import codecs
 
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from django.urls import reverse
-import csv
-import codecs
 from django.core.exceptions import ValidationError
-
 
 
 districts = (
@@ -606,8 +605,9 @@ class CollectionCenter(models.Model):
 class CsvBulkUpload(models.Model):
     name = models.CharField(max_length=20)
     csv_file = models.FileField(upload_to=upload_to)
-    is_completed = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False, verbose_name="Import Status")
     camp = models.ForeignKey(RescueCamp, models.CASCADE)
+    failure_reason = models.CharField(max_length=150, default='', blank=True, verbose_name="Reason of failure, if failed")
 
     def full_clean(self, *args, **kwargs):
         self.csv_file.open(mode="rb")
