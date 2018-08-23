@@ -855,7 +855,7 @@ class CollectionCenterListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter'] = CollectionCenterFilter(
-            self.request.GET, queryset=CollectionCenter.objects.all()
+            self.request.GET, queryset=CollectionCenter.objects.all().order_by('-id')
         )
         return context
 
@@ -870,7 +870,6 @@ class CollectionCenterForm(forms.ModelForm):
             'type_of_materials_collecting',
             'is_inside_kerala',
             'district',
-            'lsg_type',
             'lsg_name',
             'ward_name',
             'city',

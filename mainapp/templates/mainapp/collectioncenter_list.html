@@ -15,20 +15,22 @@
 
     <table class="table" id="collection-center-table">
         <tr>
-          <th>Center Name <span><input class="search" id="search-name" type="text" name="search-name" /></span></th>
-          <th>Address <span><input class="search" id="search-address" type="text" name="search-address" /></span></th>
-          <th>Contacts <span><input class="search" id="search-contact" type="text" name="search-contact" /></span></th>
-          <th>Materials Collecting <span><input class="search" id="search-materials" type="text" name="search-materials" /></span></th>
+            <th>Center ID</th>
+            <th>Center Name <span><input class="search" id="search-name" type="text" name="search-name" /></span></th>
+            <th>Address <span><input class="search" id="search-address" type="text" name="search-address" /></span></th>
+            <th>Contacts <span><input class="search" id="search-contact" type="text" name="search-contact" /></span></th>
+            <th>Materials Collecting <span><input class="search" id="search-materials" type="text" name="search-materials" /></span></th>
         </tr>
     {% for center in filter.qs %}
         <tr valign="top">
+              <td>{{ center.id }}</td>
               <td>{{ center.name }}</td>
               <td>{{ center.address }}</td>
               <td>{{ center.contacts }}</td>
               <td>{{ center.type_of_materials_collecting }}</td>
         </tr>
     {% empty %}
-        <tr><td colspan="4">No Collection Centers added yet.</td></tr>
+        <tr><td colspan="5">No Collection Centers added yet.</td></tr>
     {% endfor %}
     </table>
 
@@ -74,16 +76,16 @@
                 el = $(el);
                 var tds = el.find("td");
 
-                var name = tds.eq(0).text().toLowerCase();
+                var name = tds.eq(1).text().toLowerCase();
                 var nameKey = $("#search-name").val().toLowerCase();
 
-                var address = tds.eq(1).text().toLowerCase();
+                var address = tds.eq(2).text().toLowerCase();
                 var addressKey = $("#search-address").val().toLowerCase();
 
-                var contact = tds.eq(2).text().toLowerCase();
+                var contact = tds.eq(3).text().toLowerCase();
                 var contactKey = $("#search-contact").val().toLowerCase();
 
-                var materials = tds.eq(3).text().toLowerCase();
+                var materials = tds.eq(4).text().toLowerCase();
                 var materialsKey = $("#search-materials").val().toLowerCase();
 
 
