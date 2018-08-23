@@ -1,9 +1,9 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.staticfiles.testing import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
 
 
-class HomePageHyperLinksTest(StaticLiveServerTestCase):
+class HomePageHyperLinksTest(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):

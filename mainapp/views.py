@@ -233,8 +233,10 @@ def relief_camps(request):
 def relief_camps_list(request):
     filter = RescueCampFilter(request.GET, queryset=RescueCamp.objects.filter(status='active'))
     relief_camps = filter.qs.annotate(count=Count('person')).order_by('district','name').all()
-
-    return render(request, 'mainapp/relief_camps_list.html', {'filter': filter , 'relief_camps' : relief_camps, 'district_chosen' : len(request.GET.get('district') or '')>0 })
+    paginator = Paginator(relief_camps,20)
+    page = request.GET.get('page')
+    req_reliefcamps = paginator.get_page(page)
+    return render(request, 'mainapp/relief_camps_list.html', {'filter': filter , 'relief_camps' : relief_camps, 'district_chosen' : len(request.GET.get('district') or '')>0,'relief_camps_pag': req_reliefcamps})
 
 
 class RequestFilter(django_filters.FilterSet):
@@ -731,6 +733,9 @@ class PrivateCampFilter(django_filters.FilterSet):
             'name' : ['icontains']
         }
 
+
+
+
     def __init__(self, *args, **kwargs):
         super(PrivateCampFilter, self).__init__(*args, **kwargs)
         if self.data == {}:
@@ -853,9 +858,11 @@ class CollectionCenterListView(ListView):
     ordering = ['-id']
 
     def get_context_data(self, **kwargs):
+        location = self.kwargs['location']
+        inside_kerala = True if location == 'inside_kerala' else False
         context = super().get_context_data(**kwargs)
         context['filter'] = CollectionCenterFilter(
-            self.request.GET, queryset=CollectionCenter.objects.all().order_by('-id')
+            self.request.GET, queryset=CollectionCenter.objects.filter(is_inside_kerala=inside_kerala).order_by('-id')
         )
         return context
 

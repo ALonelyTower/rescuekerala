@@ -38,7 +38,7 @@
       <th>Contact Numbers</th>
       <th>Total People</th>
     </tr>
-    {% for item in relief_camps %}
+    {% for item in relief_camps_pag %}
     <tr valign="top">
       <td><strong>{{ item.get_district_display }}</strong></td>
       <td>
@@ -60,6 +60,29 @@
     </tr>
     {% endfor %}
   </table>
+
+  <!-- pagination part of  -->
+  {% if relief_camps_pag.has_other_pages %}
+  <ul class="pagination">
+    {% if relief_camps_pag.has_previous %}
+      <li><a href="?page={{ relief_camps_pag.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in relief_camps_pag.paginator.page_range %}
+      {% if relief_camps_pag.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <li><a href="?page={{ relief_camps_pag.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 </div>
 {% elif district_chosen  %}
 <div class="text-center text-warning">
