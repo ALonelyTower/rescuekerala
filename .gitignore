@@ -9,4 +9,3 @@ venv
 .idea/*
 geckodriver.log
 media/
-geckodriver.log
