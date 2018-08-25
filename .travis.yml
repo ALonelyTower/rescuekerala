@@ -7,6 +7,7 @@ services:
   - redis-server
 addons:
   postgresql: "9.4"
+  firefox: "latest"
 
 env:
   matrix:
@@ -18,7 +19,12 @@ env:
       INTERNAL_IPS= "localhost"
       SENTRY_DSN=""
       REDIS_URL="redis://localhost:6379"
-      
+
+before_install:
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz
+  - mkdir geckodriver
+  - tar -xf geckodriver-v0.21.0-linux64.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 
 install:
   - pip install -r requirements.txt
