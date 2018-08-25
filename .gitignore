@@ -7,5 +7,6 @@ staticfiles/
 mysite.log
 venv
 .idea/*
+geckodriver.log
 media/
 geckodriver.log
