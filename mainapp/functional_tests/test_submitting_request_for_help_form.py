@@ -10,15 +10,15 @@ from mainapp.views import CreateRequest
 from django.http import HttpResponseRedirect
 
 
-class HomePageHyperLinksTest(LiveServerTestCase):
+class RequestHelpFormSubmissionTest(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         opts = FirefoxOptions()
         opts.add_argument("--headless")
-        # cls.selenium = webdriver.Firefox(firefox_options=opts)
-        cls.selenium = webdriver.Firefox()
+        cls.selenium = webdriver.Firefox(firefox_options=opts)
+        cls.selenium.implicitly_wait(5)
 
     @classmethod
     def tearDownClass(cls):
@@ -26,36 +26,42 @@ class HomePageHyperLinksTest(LiveServerTestCase):
         super().tearDownClass()
 
     def fake_form_valid(self, form):
+        """
+        A mock method for replacing form_valid in mainapp.views.CreateRequest
+        The commit is set to false; otherwise, there's a race condition between
+            the commit and the destruction of the database.
+        """
         self.object = form.save(commit=False)
         return HttpResponseRedirect(self.get_success_url())
 
     @patch.object(CreateRequest, 'form_valid', fake_form_valid)
-    def test_navigate_from_home_to_requestforhelp(self):
-        expected_malayalam_text = "സഹായം അഭ്യർത്ഥിക്കാൻ"
+    def test_submitting_request_for_help_form(self):
+        # Go to homepage of kelararescue
         self.selenium.get(self.live_server_url)
 
-        request_help_link = self.selenium.find_element_by_partial_link_text(expected_malayalam_text)
-        request_help_link.click()
+        # Click on Request for Help link
+        self.selenium.find_element_by_partial_link_text("സഹായം അഭ്യർത്ഥിക്കാൻ").click()
 
-        self._wait_until_allow_location_window_disappears()
-
+        # Check if we're on the requests page
         self.assertIn('/request/', self.selenium.current_url)
+
+        self._click_ok_in_allow_location_window()
 
         self._fill_out_request_help_form()
 
+        # Submit form
         request_form = self.selenium.find_element_by_tag_name("form")
         request_form.find_element_by_tag_name("button").click()
 
-        request_success_headers = self.selenium.find_elements_by_tag_name("h3")
-
+        # Check if we're on the request success page
         self.assertIn("/req_sucess/", self.selenium.current_url)
-        self.assertIn("Request successfully registered", request_success_headers[0].text)
-        self.assertIn("താങ്കളുടെ അപേക്ഷ രജിസ്റ്റർ ചെയ്തിരിക്കുന്നു", request_success_headers[1].text)
 
 
     def _fill_out_request_help_form(self):
+        # Click to open dropdown window
         self.selenium.find_element_by_class_name("selectize-control").click()
 
+        # Select District from dropdown
         district_dropdown_content = self.selenium.find_element_by_class_name("selectize-dropdown-content")
         allapuzha_option = district_dropdown_content.find_element_by_css_selector("div.option")
         allapuzha_option.click()
@@ -69,6 +75,7 @@ class HomePageHyperLinksTest(LiveServerTestCase):
         requestee_phone_textbox = self.selenium.find_element_by_id("id_requestee_phone")
         requestee_phone_textbox.send_keys("5555555555")
 
+        # Check off all Need checkboxes
         self.selenium.find_element_by_id("id_is_request_for_others").click() 
         self.selenium.find_element_by_id("id_needrescue").click() 
         self.selenium.find_element_by_id("id_needwater").click() 
@@ -84,13 +91,23 @@ class HomePageHyperLinksTest(LiveServerTestCase):
         manual_location_textbox = self.selenium.find_element_by_id("pac-input")
         manual_location_textbox.send_keys("Palazhi Rd, Karamuck, Manalur, Kerala 680617, India")
 
-    def _wait_until_allow_location_window_disappears(self):
-        wait = WebDriverWait(self.selenium, 5)
+    def _click_ok_in_allow_location_window(self):
+        """
+        Important to deal with this window as it prevents interaction with some elements of the form.
+        """
+        MAX_WAIT = 5
+        wait = WebDriverWait(self.selenium, MAX_WAIT)
+
+        # Wait until Allow Location window appears
         wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "modal-dialog")))
+
+        # Scroll to Allow Location 'OK' button, then click to close
         modal_dialog_window = self.selenium.find_element_by_class_name("modal-dialog")
         actions = ActionChains(self.selenium)
         actions.move_to_element(modal_dialog_window).perform()
         self.selenium.find_element_by_id("modal_ok_button").click()
+
+        # Wait until the Allow Location window fades
         wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "modal-backdrop")))
 
 
