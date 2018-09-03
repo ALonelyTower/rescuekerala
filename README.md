@@ -13,6 +13,7 @@
     - [Postgres](#postgres)
     - [Git](#git)
     - [Redis](#redis)
+    - [Geckodriver](#geckodriver)
     - [Setting up an S3 Account](#setting-up-an-s3-account)
 - [Getting started](#getting-started)
 - [Creating migration files](#creating-migration-files)
@@ -39,6 +40,9 @@
 #### [Git](https://git-scm.com/downloads)
 
 #### [Redis](https://redis.io/)
+
+#### [Geckodriver](https://github.com/mozilla/geckodriver/releases)
+Selenium depends on browser binaries for its browser interactions.  Because we're testing for Firefox, we need the latest geckodrivers.  After downloading the binary from the Mozilla repository, we need to extract and relocate it to a directory in your SYSTEM'S PATH, or add a new directory containing the binary to the SYSTEM PATH variable.
 
 #### Setting up an S3 Account
 
