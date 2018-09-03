@@ -21,9 +21,7 @@ env:
       REDIS_URL="redis://localhost:6379"
 
 before_install:
-  - json_output=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest)
-  - echo $json_output
-  - export json_output
+  - export json_output=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest)
   - version=$(python -c "import os, json; json_str=os.environ['json_output']; print(json.loads(json_str)['tag_name'])")
   - url=$(echo https://github.com/mozilla/geckodriver/releases/download/$version/geckodriver-$version-linux64.tar.gz)
   - mkdir geckodriver
