@@ -7,6 +7,7 @@ services:
   - redis-server
 addons:
   postgresql: "9.4"
+  firefox: "latest"
 
 env:
   matrix:
@@ -18,7 +19,15 @@ env:
       INTERNAL_IPS= "localhost"
       SENTRY_DSN=""
       REDIS_URL="redis://localhost:6379"
-      
+
+before_install:
+  - json_output=$(wget -q -O - https://api.github.com/repos/mozilla/geckodriver/releases/latest)
+  - export json_output
+  - version=$(python -c "import os, json; json_str=os.environ['json_output']; print(json.loads(json_str)['tag_name'])")
+  - url=$(echo https://github.com/mozilla/geckodriver/releases/download/$version/geckodriver-$version-linux64.tar.gz)
+  - mkdir geckodriver
+  - wget -q -O - $url | tar -xz -C geckodriver
+  - export PATH=$PWD/geckodriver:$PATH
 
 install:
   - pip install -r requirements.txt
